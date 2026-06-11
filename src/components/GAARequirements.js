@@ -54,11 +54,16 @@ function GAARequirements({ nvccProgram, catalogYear, transferSchool, transferMaj
         <div>
           <h3>General education areas</h3>
           <ul>
-            {Object.entries(requirements.generalEducationAreas).map(([area, count]) => (
-              <li key={area}>
-                {area}: {count} course{count === 1 ? "" : "s"}
-              </li>
-            ))}
+            {Object.entries(requirements.generalEducationAreas).map(([area, value]) => {
+              const suffix = typeof value === "number" ? ` course${value === 1 ? "" : "s"}` : "";
+
+              return (
+                <li key={area}>
+                  {area}: {value}
+                  {suffix}
+                </li>
+              );
+            })}
           </ul>
         </div>
 

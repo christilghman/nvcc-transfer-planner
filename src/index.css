@@ -119,7 +119,9 @@ input {
 .feature-strip,
 .semester-grid,
 .requirements-grid,
-.form-grid {
+.form-grid,
+.roadmap-grid,
+.source-list {
   display: grid;
   gap: 16px;
 }
@@ -133,6 +135,8 @@ input {
 .planner-panel,
 .semester-card,
 .requirements-panel,
+.roadmap-panel,
+.source-panel,
 .progress-card {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -168,6 +172,8 @@ input {
 .pathway-preview p,
 .semester-card p,
 .requirements-panel p,
+.roadmap-panel p,
+.source-panel p,
 .save-message {
   color: var(--muted);
   line-height: 1.5;
@@ -183,6 +189,8 @@ input {
 
 .planner-panel,
 .requirements-panel,
+.roadmap-panel,
+.source-panel,
 .empty-state {
   padding: 24px;
 }
@@ -312,7 +320,72 @@ select:disabled {
 }
 
 .course-meta {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
   white-space: nowrap;
+}
+
+.priority-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #eaf3ee;
+  color: var(--green);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.roadmap-panel,
+.source-panel {
+  margin-top: 24px;
+}
+
+.roadmap-grid {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 18px;
+}
+
+.roadmap-grid article,
+.source-list article {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfcfd;
+}
+
+.roadmap-grid h3,
+.source-list h3 {
+  margin: 0 0 10px;
+}
+
+.roadmap-grid ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roadmap-grid li {
+  display: grid;
+  gap: 3px;
+}
+
+.roadmap-grid span,
+.roadmap-grid small {
+  color: var(--muted);
+}
+
+.source-list {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 12px;
+}
+
+.source-list p {
+  margin: 6px 0 0;
 }
 
 .requirements-panel {
@@ -366,6 +439,8 @@ select:disabled {
   .form-grid,
   .semester-grid,
   .requirements-grid,
+  .roadmap-grid,
+  .source-list,
   .requirement-stats {
     grid-template-columns: 1fr;
   }

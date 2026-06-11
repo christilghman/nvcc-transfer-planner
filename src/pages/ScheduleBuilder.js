@@ -155,6 +155,9 @@ function ScheduleBuilder() {
                   </span>
                   <span className="course-meta">
                     {course.type} | {course.credits} cr
+                    {course.transferPriority && (
+                      <span className="priority-pill">{course.transferPriority}</span>
+                    )}
                   </span>
                 </label>
               ))}
@@ -163,6 +166,9 @@ function ScheduleBuilder() {
         ))}
       </section>
 
+      {plan.transferRoadmap && <TransferRoadmap plan={plan} />}
+      {plan.sourceDocuments && <SourceDocuments documents={plan.sourceDocuments} />}
+
       <GAARequirements
         nvccProgram={nvccProgram}
         catalogYear={catalogYear}
@@ -170,6 +176,64 @@ function ScheduleBuilder() {
         transferMajor={transferMajor}
       />
     </main>
+  );
+}
+
+function TransferRoadmap({ plan }) {
+  const categories = [
+    ["Required", plan.transferRoadmap.required],
+    ["Strongly Recommended", plan.transferRoadmap.stronglyRecommended],
+    ["Recommended", plan.transferRoadmap.recommended]
+  ];
+
+  return (
+    <section className="roadmap-panel">
+      <div>
+        <p className="eyebrow">Transfer roadmap priorities</p>
+        <h2>{plan.transferCollege || "Transfer"} course priorities</h2>
+        <p>
+          These courses come from the destination university roadmap and help
+          explain which NVCC classes matter most for transfer readiness.
+        </p>
+      </div>
+
+      <div className="roadmap-grid">
+        {categories.map(([label, courses]) => (
+          <article key={label}>
+            <h3>{label}</h3>
+            <ul>
+              {courses.map((course) => (
+                <li key={`${label}-${course.vtCourse}-${course.nvccCourse}`}>
+                  <strong>{course.nvccCourse}</strong>
+                  <span>{course.title}</span>
+                  <small>VT: {course.vtCourse}</small>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SourceDocuments({ documents }) {
+  return (
+    <section className="source-panel">
+      <p className="eyebrow">Source documents used</p>
+      <div className="source-list">
+        {documents.map((document) => (
+          <article key={`${document.type}-${document.label}`}>
+            <h3>{document.label}</h3>
+            <p>
+              {document.type}
+              {document.year ? ` | ${document.year}` : ""}
+            </p>
+            {document.note && <p>{document.note}</p>}
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
