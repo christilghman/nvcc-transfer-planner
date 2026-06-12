@@ -192,8 +192,8 @@ function TransferRoadmap({ plan }) {
         <p className="eyebrow">Transfer roadmap priorities</p>
         <h2>{plan.transferCollege || "Transfer"} course priorities</h2>
         <p>
-          These courses come from the destination university roadmap and help
-          explain which NVCC classes matter most for transfer readiness.
+          These items come from the destination university sources and help
+          explain which NVCC classes and requirements matter most for transfer readiness.
         </p>
       </div>
 
@@ -206,7 +206,7 @@ function TransferRoadmap({ plan }) {
                 <li key={`${label}-${course.vtCourse}-${course.nvccCourse}`}>
                   <strong>{course.nvccCourse}</strong>
                   <span>{course.title}</span>
-                  <small>VT: {course.vtCourse}</small>
+                  <small>Destination: {course.vtCourse}</small>
                 </li>
               ))}
             </ul>
