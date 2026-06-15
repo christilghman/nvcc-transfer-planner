@@ -14,7 +14,8 @@ export const vtComputerScience2026 = {
     {
       label: "NVCC Computer Science, A.S. catalog",
       year: "2026-2027",
-      type: "NVCC catalog"
+      type: "NVCC catalog",
+      url: "https://catalog.nvcc.edu/programs/computer-science-as/"
     },
     {
       label: "Virginia Tech Computer Science transfer roadmap",
@@ -103,13 +104,13 @@ export const vtComputerScience2026 = {
     {
       id: "semester-4",
       label: "Semester 4",
-      focus: "Transfer competitiveness and degree completion",
+      focus: "Second lab science and transfer competitiveness",
       courses: [
         { code: "EGR 122", title: "Engineering Design", credits: 3, type: "Approved Elective", transferPriority: "VT Strongly Recommended" },
         { code: "MTH 266", title: "Linear Algebra", credits: 3, type: "Approved Elective", transferPriority: "VT Recommended" },
         { code: "MTH 265", title: "Calculus III", credits: 4, type: "Approved Elective", transferPriority: "VT Recommended" },
+        { code: "BIO 101 or CHM 111", title: "Second lab science option", credits: 4, type: "Science Elective", transferPriority: "VT Recommended" },
         { code: "Social/Behavioral Science", title: "Social or behavioral science elective", credits: 3, type: "Required" },
-        { code: "Humanities/Fine Arts", title: "Second humanities or fine arts elective", credits: 3, type: "Required" }
       ]
     }
   ]

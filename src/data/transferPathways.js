@@ -1,9 +1,11 @@
 import { gmuComputerScience2024 } from "./pathwayRecords/gmuComputerScience2024";
+import { jmuBusinessAdministration2026 } from "./pathwayRecords/jmuBusinessAdministration2026";
 import { uvaComputerScience2026 } from "./pathwayRecords/uvaComputerScience2026";
 import { vtComputerScience2026 } from "./pathwayRecords/vtComputerScience2026";
 
 export const transferPathways = [
   gmuComputerScience2024,
+  jmuBusinessAdministration2026,
   vtComputerScience2026,
   uvaComputerScience2026
 ];

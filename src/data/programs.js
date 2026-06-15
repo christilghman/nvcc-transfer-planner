@@ -1,6 +1,6 @@
 export const nvccPrograms = {
-  business: {
-    name: "Business",
+  businessAdministration: {
+    name: "Business Administration",
     degree: "Associate of Science"
   },
   liberalArtsHumanities: {

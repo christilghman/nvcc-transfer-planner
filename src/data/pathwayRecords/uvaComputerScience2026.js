@@ -14,7 +14,8 @@ export const uvaComputerScience2026 = {
     {
       label: "NVCC Computer Science, A.S. catalog",
       year: "2026-2027",
-      type: "NVCC catalog"
+      type: "NVCC catalog",
+      url: "https://catalog.nvcc.edu/programs/computer-science-as/"
     },
     {
       label: "UVA Engineering Guaranteed Admission Agreement",

@@ -556,6 +556,18 @@ select:disabled {
   margin: 6px 0 0;
 }
 
+.source-link {
+  display: inline-flex;
+  margin-top: 12px;
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.source-link:hover {
+  text-decoration: underline;
+}
+
 .requirements-panel {
   margin-top: 24px;
 }

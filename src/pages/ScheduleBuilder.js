@@ -229,6 +229,11 @@ function SourceDocuments({ documents }) {
               {document.type}
               {document.year ? ` | ${document.year}` : ""}
             </p>
+            {document.url && (
+              <a className="source-link" href={document.url} rel="noreferrer" target="_blank">
+                Open Source
+              </a>
+            )}
             {document.note && <p>{document.note}</p>}
           </article>
         ))}
