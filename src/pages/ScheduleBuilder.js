@@ -1,10 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GAARequirements from "../components/GAARequirements";
 import { transferSchools } from "../data/schools";
 import { getTransferPathway } from "../data/transferPathways";
+import { plansApi } from "../services/plansApi";
 
 const DRAFT_KEY = "nova-transfer-planner-draft";
+const SAVE_RETRY_DELAY_MS = 700;
+
+function wait(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
 
 function getInitialSelection(locationState) {
   if (
@@ -29,7 +37,10 @@ function ScheduleBuilder() {
   const initialSelection = getInitialSelection(location.state);
   const { nvccProgram, catalogYear, transferSchool, transferMajor } = initialSelection;
   const [completedCourses, setCompletedCourses] = useState([]);
+  const [draftPlanId, setDraftPlanId] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const isSavingRef = useRef(false);
 
   const school = transferSchools[transferSchool];
   const plan = getTransferPathway({
@@ -58,9 +69,11 @@ function ScheduleBuilder() {
         savedDraft?.selection?.transferMajor === transferMajor
       ) {
         setCompletedCourses(savedDraft.completedCourses || []);
+        setDraftPlanId(savedDraft.planId || "");
       }
     } catch {
       setCompletedCourses([]);
+      setDraftPlanId("");
     }
   }, [nvccProgram, catalogYear, transferSchool, transferMajor]);
 
@@ -73,15 +86,56 @@ function ScheduleBuilder() {
     );
   };
 
-  const handleSaveDraft = () => {
+  const syncDraftToAws = async (draft) => {
+    if (draftPlanId) {
+      return plansApi.update(draftPlanId, draft);
+    }
+
+    return plansApi.create(draft);
+  };
+
+  const handleSaveDraft = async () => {
+    if (isSavingRef.current) {
+      return;
+    }
+
+    isSavingRef.current = true;
+    setIsSaving(true);
+
     const draft = {
+      planId: draftPlanId || undefined,
       selection: { nvccProgram, catalogYear, transferSchool, transferMajor },
       completedCourses,
       savedAt: new Date().toISOString()
     };
 
     localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-    setSaveMessage("Saved on this device. Account sync can come later.");
+    setSaveMessage("Saved on this device. Syncing to AWS...");
+
+    try {
+      let savedPlan;
+
+      try {
+        savedPlan = await syncDraftToAws(draft);
+      } catch {
+        await wait(SAVE_RETRY_DELAY_MS);
+        savedPlan = await syncDraftToAws(draft);
+      }
+
+      const syncedDraft = {
+        ...draft,
+        planId: savedPlan.planId
+      };
+
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(syncedDraft));
+      setDraftPlanId(savedPlan.planId);
+      setSaveMessage("Saved on this device and synced to AWS.");
+    } catch {
+      setSaveMessage("Saved on this device. AWS sync is unavailable right now.");
+    } finally {
+      isSavingRef.current = false;
+      setIsSaving(false);
+    }
   };
 
   if (!plan) {
@@ -119,8 +173,8 @@ function ScheduleBuilder() {
       </section>
 
       <section className="action-row">
-        <button className="primary-button" onClick={handleSaveDraft}>
-          Save Draft
+        <button className="primary-button" disabled={isSaving} onClick={handleSaveDraft}>
+          {isSaving ? "Saving..." : "Save Draft"}
         </button>
         <Link className="secondary-button" to="/choose-university">
           Change Pathway

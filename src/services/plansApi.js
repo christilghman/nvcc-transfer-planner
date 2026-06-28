@@ -1,7 +1,6 @@
 import { apiRequest } from "./apiClient";
 
-// These functions define the frontend/backend boundary. They are intentionally
-// not connected to the UI until the first Lambda endpoints exist.
+// These functions define the frontend/backend boundary for saved transfer plans.
 export const plansApi = {
   create(plan) {
     return apiRequest("/plans", {

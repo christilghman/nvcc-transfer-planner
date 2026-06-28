@@ -3,4 +3,6 @@ node_modules/
 build/
 cdk.out/
 .env
-.env.local
+.env.*
+!.env.example
+.codex-pdf-env/

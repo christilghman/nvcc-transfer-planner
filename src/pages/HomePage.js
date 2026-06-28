@@ -1,6 +1,30 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { apiRequest } from "../services/apiClient";
 
 function HomePage() {
+  const [apiStatus, setApiStatus] = useState("checking");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    apiRequest("/health")
+      .then(() => {
+        if (isMounted) {
+          setApiStatus("connected");
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiStatus("offline");
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <main className="home-page">
       <section className="home-hero">
@@ -18,6 +42,15 @@ function HomePage() {
             <Link className="secondary-button" to="/schedule-builder">
               Open Saved Draft
             </Link>
+          </div>
+          <div className={`api-status api-status--${apiStatus}`}>
+            <span aria-hidden="true" />
+            <p>
+              API status:{" "}
+              {apiStatus === "checking" && "Checking connection"}
+              {apiStatus === "connected" && "Connected to AWS backend"}
+              {apiStatus === "offline" && "Backend unavailable"}
+            </p>
           </div>
         </div>
       </section>

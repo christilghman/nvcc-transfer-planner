@@ -2,7 +2,7 @@
 
 This folder contains the AWS CDK app for the NOVA Transfer Planner.
 
-The first stack deploys the React frontend with:
+The frontend stack deploys the React frontend with:
 
 - A private S3 bucket for the production build files
 - A CloudFront distribution in front of the bucket
@@ -11,6 +11,17 @@ The first stack deploys the React frontend with:
 - Security response headers
 - Single-page app routing for React Router
 - CloudFormation outputs for the bucket name and CloudFront URL
+
+The API stack deploys the first backend endpoint with:
+
+- API Gateway
+- Node.js Lambda functions
+- A DynamoDB table for saved plans
+- `GET /health`
+- `GET /plans`
+- `POST /plans`
+- `PATCH /plans/{planId}`
+- CloudFormation outputs for the API base URL and health endpoint URL
 
 ## How this fits together
 
@@ -26,6 +37,18 @@ React app files
 
 The S3 bucket stores the static build files. CloudFront is the public entry
 point. Users do not access the S3 bucket directly.
+
+The first backend flow is:
+
+```txt
+React app
+  ↓
+API Gateway /health or /plans
+  ↓
+Lambda function
+  ↓
+DynamoDB plans table
+```
 
 ## Local commands
 
@@ -88,6 +111,13 @@ Then deploy:
 npm run deploy
 ```
 
+The CDK app currently defines two stacks:
+
+```txt
+NovaTransferPlannerFrontendStack
+NovaTransferPlannerApiStack
+```
+
 ## Important notes
 
 This first stack is intentionally a development stack. The S3 bucket uses
@@ -97,5 +127,4 @@ easy while learning.
 For a production version, change those settings so user-facing infrastructure
 is retained instead of automatically deleted.
 
-API Gateway, Lambda, DynamoDB, Cognito, and monitoring will be added in later
-stacks.
+Cognito and monitoring will be added in later stacks.

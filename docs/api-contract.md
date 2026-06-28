@@ -19,7 +19,7 @@ documented.
 }
 ```
 
-## Initial public endpoints
+## Implemented public endpoints
 
 ### `GET /health`
 
@@ -27,9 +27,77 @@ Response:
 
 ```json
 {
-  "status": "ok"
+  "status": "ok",
+  "service": "nova-transfer-planner-api"
 }
 ```
+
+This endpoint is served by API Gateway and Lambda.
+
+### `GET /plans`
+
+Returns saved transfer plans.
+
+Response:
+
+```json
+{
+  "plans": [
+    {
+      "planId": "generated-uuid",
+      "createdAt": "2026-06-26T12:00:00.000Z",
+      "updatedAt": "2026-06-26T12:00:00.000Z",
+      "selection": {
+        "nvccProgram": "computerScience",
+        "catalogYear": "2026-2027",
+        "transferSchool": "vt",
+        "transferMajor": "computerScience"
+      },
+      "completedCourses": ["ENG 111"]
+    }
+  ]
+}
+```
+
+At this stage, this endpoint returns shared demo data. Cognito will later make
+plans private to each authenticated user.
+
+### `POST /plans`
+
+Creates a saved transfer plan.
+
+Request:
+
+```json
+{
+  "selection": {
+    "nvccProgram": "computerScience",
+    "catalogYear": "2026-2027",
+    "transferSchool": "vt",
+    "transferMajor": "computerScience"
+  },
+  "completedCourses": ["ENG 111", "MTH 263"]
+}
+```
+
+Response: `201 Created`
+
+```json
+{
+  "planId": "generated-uuid",
+  "createdAt": "2026-06-26T12:00:00.000Z",
+  "updatedAt": "2026-06-26T12:00:00.000Z",
+  "selection": {
+    "nvccProgram": "computerScience",
+    "catalogYear": "2026-2027",
+    "transferSchool": "vt",
+    "transferMajor": "computerScience"
+  },
+  "completedCourses": ["ENG 111", "MTH 263"]
+}
+```
+
+## Planned public endpoints
 
 ### `GET /pathways`
 
@@ -43,28 +111,26 @@ GAA requirements, and source documents.
 
 ## Future authenticated plan endpoints
 
-### `GET /plans`
+### `PATCH /plans/{planId}`
 
-Returns every plan owned by the authenticated user.
+Updates mutable plan fields such as `completedCourses`.
 
-### `POST /plans`
+Implemented as an unauthenticated demo endpoint for now. Cognito will later
+restrict updates to the plan owner.
 
 Request:
 
 ```json
 {
-  "catalogYear": "2026-2027",
-  "completedCourses": ["ENG 111", "MTH 263"],
-  "nvccProgram": "computerScience",
-  "pathwayId": "nvcc-computer-science-to-vt-computer-science-2026-2027",
-  "transferMajor": "computerScience",
-  "transferSchool": "vt"
+  "selection": {
+    "nvccProgram": "computerScience",
+    "catalogYear": "2026-2027",
+    "transferSchool": "vt",
+    "transferMajor": "computerScience"
+  },
+  "completedCourses": ["ENG 111", "MTH 263", "CSC 221"]
 }
 ```
-
-### `PATCH /plans/{planId}`
-
-Updates mutable plan fields such as `completedCourses`.
 
 ### `DELETE /plans/{planId}`
 
